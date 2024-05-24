@@ -6,6 +6,7 @@ namespace App\Router;
 
 use App\Bootstrap;
 use App\Model\API\Action;
+use App\Model\Utils\Uri;
 use Nette;
 use Nette\Application\Routers\RouteList;
 
@@ -13,6 +14,7 @@ use Nette\Application\Routers\RouteList;
 final class RouterFactory
 {
 	use Nette\StaticClass;
+
     const API_PREFIX = "api";
 
 	public static function createRouter(): RouteList
@@ -84,16 +86,6 @@ final class RouterFactory
     public static array $sitemap = [];
 
     /**
-     * Convert string from CamelCase to snake_case
-     * @param string $controller_or_module
-     * @return string
-     */
-    private static function normalizeSnakeCase(string $controller_or_module): string
-    {
-        return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $controller_or_module));
-    }
-
-    /**
      * Using self::SELF_MODULE_CONTROLLER as variable used in $controllers
      * @param array $submodules
      * @param array $controllers
@@ -106,8 +98,8 @@ final class RouterFactory
         foreach ($submodules as $submodule) { // modules
             foreach ($controllers as $controller) {
                 if($controller === self::SELF_MODULE_CONTROLLER) $controller = $submodule;
-                $normalizedSubmodule = self::normalizeSnakeCase($submodule);
-                $normalizedController = self::normalizeSnakeCase($controller);
+                $normalizedSubmodule =  Uri::toSnakeCase($submodule);
+                $normalizedController = Uri::toSnakeCase($controller);
                 if(empty($submodule)) {
                     $routeList
                         ->addRoute($normalizedController . "/<id>", $controller . ":one")
@@ -124,5 +116,13 @@ final class RouterFactory
                     $routeList->getPath() . (!empty($submodule) ? $normalizedSubmodule : "") . "/" . $normalizedController] = [Action::GET, Action::POST];
             }
         }
+    }
+
+    public static function createApplicationRouter(): void {
+
+    }
+
+    public static function createApiRouter(): void {
+
     }
 }
