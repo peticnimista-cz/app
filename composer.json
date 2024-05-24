@@ -34,10 +34,6 @@
 	"config": {
 		"allow-plugins": {
 			"symfony/thanks": true
-		},
-		"platform-check": false,
-		"platform": {
-			"php": "8.1.10"
 		}
 	}
 }
