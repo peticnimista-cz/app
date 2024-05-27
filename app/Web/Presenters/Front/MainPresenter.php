@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Presenters\Front;
+namespace App\Web\Presenters\Front;
 
-class MainPresenter
+use App\Presenters\FrontBasePresenter;
+
+class MainPresenter extends FrontBasePresenter
 {
-
 }

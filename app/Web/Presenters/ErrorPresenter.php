@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Presenters;
+namespace App\Web\Presenters;
 
-class ErrorPresenter
+class ErrorPresenter extends BasePresenter
 {
 
 }

@@ -9,12 +9,12 @@ use Nette\Application\Routers\RouteList;
 
 class ApiRouter
 {
-    const MODULE_NAME = "api";
+    const MODULE_NAME = "Api";
     const PREFIX = "api";
 
     public static function createRouter(): RouteList {
         $router = new RouteList();
-        $router = $router->withModule(self::MODULE_NAME)->withPath(self::PREFIX);
+        $router = $router->withPath(self::PREFIX)->withModule(self::MODULE_NAME);
         $sitemap = [];
         if(Bootstrap::DEBUG_MODE) {
             $router->addRoute('test', 'Test:test');

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Presenters;
+namespace App\Web\Presenters;
 
-class AdminBasePresenter
+class AdminBasePresenter extends BasePresenter
 {
 
 }

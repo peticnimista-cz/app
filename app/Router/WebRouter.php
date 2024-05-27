@@ -6,7 +6,7 @@ use Nette\Application\Routers\RouteList;
 
 class WebRouter
 {
-    const MODULE_NAME = "app";
+    const MODULE_NAME = "Web";
     const PREFIX = "";
 
     /**
@@ -14,8 +14,9 @@ class WebRouter
      */
     public static function createRouter(): RouteList{
         $applicationRouter = new RouteList();
-        $applicationRouter = $applicationRouter->withModule(self::MODULE_NAME)->withPath(self::PREFIX);
-        $applicationRouter->addRoute("das", "Front:Main");
+        $applicationRouter = $applicationRouter->withPath(self::PREFIX)->withModule(self::MODULE_NAME);
+
+        $applicationRouter->withModule("Front")->addRoute("", "Main:home");
 
         return $applicationRouter;
     }
