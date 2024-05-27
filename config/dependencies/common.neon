@@ -1,4 +1,4 @@
 application:
     mapping:
-        Site:
-        Api:
+        Site: ['App\Web\Presenters', '*', '*\*Presenter']
+        Api: ['App\Api\Controllers', '*', '*\*Controller']
