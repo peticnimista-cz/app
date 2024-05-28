@@ -2,7 +2,8 @@
 
 namespace App\Web\Presenters\Front;
 
-use App\Presenters\FrontBasePresenter;
+
+use App\Web\Presenters\FrontBasePresenter;
 
 class MainPresenter extends FrontBasePresenter
 {
