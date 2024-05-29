@@ -1,0 +1,30 @@
+{define navigation}
+<nav class="flex gap-x-2 w-full items-center">
+    <div class="bg-brand text-white flex justify-center px-10 py-3 h-full">
+        <img src="{$basePath}/img/logo.svg" class="w-40" alt="Logo petičních míst">
+    </div>
+    <div class="pl-4">
+        <ul class="flex items-center h-full gap-3">
+            <li>
+                <a href="">
+                    <i class="ri-group-2-fill"></i>
+                    <span class="font-bold text-secondary-2">Petiční výbory</span>
+                </a>
+            </li>
+            <li>
+                <a href="" class="text-brand-secondary">
+                    <i class="ri-newspaper-line"></i>
+                    <span class="font-bold">Nejnovější petice</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="flex-grow">
+        {import TEMPLATE_COMMON . "/Forms/searchInput.latte"}
+        {include searchInput, "Vyhledejte aktuální petice, nejbližší petiční místa či petiční výbory..."}
+    </div>
+    <div class="pr-6">
+        <a href="" class="user-button flex">Přihlásit se</a>
+    </div>
+</nav>
+{/define}

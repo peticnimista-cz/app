@@ -1,9 +1,0 @@
-config/dev.neon
-config/production.neon
-.idea
-vendor
-
-composer.lock
-composer.phar
-
-node_modules

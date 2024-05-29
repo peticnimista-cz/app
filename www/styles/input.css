@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+.search-input-1, .search-input-1 * {
+    @apply rounded-tr-[90px];
+    @apply rounded-br-[90px];
+    @apply items-center;
+}
+
+.search-input-1 {
+    @apply h-full;
+
+    @apply flex;
+    @apply gap-2;
+
+    @apply px-2;
+
+    @apply rounded-tl-[90px];
+    @apply rounded-bl-[90px];
+    @apply border;
+
+    color: #646464;
+    background-color: #F0F0F0;
+}
+
+.search-input-1 input {
+    background-color: #F0F0F0;
+
+}
+
+.user-button {
+    @apply rounded-[90px];
+    @apply text-white;
+    @apply py-3;
+    @apply px-6;
+    @apply font-bold;
+    @apply items-center;
+
+    background-color: theme("colors.user");
+}

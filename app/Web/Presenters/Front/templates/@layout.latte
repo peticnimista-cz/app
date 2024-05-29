@@ -11,35 +11,14 @@
         {ifset #head}
             {include head}
         {/ifset}
+        <link rel="stylesheet" href="{$basePath}/styles/output.css">
         <script src="https://cdn.tailwindcss.com"></script>
-        <script src="{$basePath}/js/tailwind.config.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.min.css" integrity="sha512-MqL4+Io386IOPMKKyplKII0pVW5e+kb+PI/I3N87G3fHIfrgNNsRpzIXEi+0MQC0sR9xZNqZqCYVcC61fL5+Vg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     </head>
     <body>
-        <nav class="flex">
-            <div class="bg-brand text-white">
-                dddd
-            </div>
-            <div>
-                <ul>
-                    <li>
-                        <a href="">Petiční výbory</a>
-                    </li>
-                    <li>
-                        <a href="">
-                            Nejnovější petice
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            <div>
-                <label>
-                    <input type="search" placeholder="search-placeholder">
-                </label>
-            </div>
-            <div>
-                <a href="">Přihlásit se</a>
-            </div>
-        </nav>
+        {import "@Parts/navigation.latte"}
+        {include navigation}
+
         {include content}
     </body>
 </html>
