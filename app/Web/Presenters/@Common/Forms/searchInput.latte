@@ -1,9 +1,9 @@
 {* Vyhledávací input ve formuláři, používá TailwindCSS/Remix icons *}
 {define searchInput, $placeholderText = ""}
-<label class="flex gap-2 items-center rounded-[90px] px-4 items-center border text-[#646464] cursor-text bg-[#F0F0F0]">
+<label class="flex gap-1 items-center rounded-[90px] px-4 items-center border text-[#646464] cursor-text bg-[#F0F0F0]">
     <i class="ri-search-line"></i>
     <input type="search"
            placeholder={$placeholderText}
-           class="bg-[#F0F0F0] w-full h-full p-0 m-0 rounded-tr-[90px] py-3 rounded-br-[90px]">
+           class="bg-[#F0F0F0] w-full h-full px-2 p-0 m-0 rounded-tr-[90px] py-3 rounded-br-[90px]">
 </label>
 {/define}
