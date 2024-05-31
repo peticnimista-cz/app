@@ -2,7 +2,9 @@
 
 namespace App\Web\Presenters\Front;
 
-class PetitionCommitteePresenter
+use App\Web\Presenters\FrontBasePresenter;
+
+class PetitionCommitteePresenter extends FrontBasePresenter
 {
 
 }
