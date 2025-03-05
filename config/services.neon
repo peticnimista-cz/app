@@ -1,0 +1,11 @@
+services:
+	- App\Core\RouterFactory::createRouter
+
+extensions:
+    - App\Model\Extensions\FormMultiplier\DI\MultiplierExtension
+
+search:
+	-	in: %appDir%
+		classes:
+			- *Factory
+			- *Facade

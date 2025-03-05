@@ -1,0 +1,174 @@
+{define multiplierRecursion, $form, $inputComponent, $counter = 0}
+<div class="form-group grid grid-cols-12" n:if="$inputComponent instanceof App\Model\Extensions\FormMultiplier\Multiplier">
+    <div n:if="!$inputComponent->getOption(App\Forms\FormOption::FULL_WIDTH)" class="sm:col-span-2 text-black-50 small">
+        <span n:ifcontent>{$inputComponent->getOption(App\Forms\FormOption::MULTIPLIER_CAPTION_COLUMN)}</span></div>
+    <div n:class="$inputComponent->getOption(App\Forms\FormOption::FULL_WIDTH) ? 'sm:col-span-12' : 'sm:col-span-10'">
+        <div n:class="(int)$counter % 2 === 0 ? 'bg-light' : 'bg-white', 'border p-3 mb-3'">
+            <b>{$inputComponent->getCaption()}</b>
+            <div class="my-3 p-4 pb-0 border" n:multiplier="$inputComponent->getName()" style="background-color: lightyellow">
+                {var $firstKey = array_key_first($inputComponent->getComponents(false))}
+                {foreach $inputComponent[$firstKey]->getComponents(false, Nette\Forms\Control::class) as $childComponent}
+                {skipIf $childComponent->getName() === 'multiplier_creator'}
+                {skipIf $childComponent->getOption(App\Forms\FormOption::MULTIPLIER_HIDDEN)}
+                {skipIf !($childComponent->getOption(App\Forms\FormOption::MULTIPLIER_PARENT) == $inputComponent->getName())}
+                <div class="form-group grid grid-cols-12">
+                    {if $childComponent instanceof App\Model\Extensions\FormMultiplier\Multiplier}
+                    <div class="sm:col-span-12">
+                        {include multiplierRecursion, form: $form, inputComponent: $childComponent, counter: (int)$counter+1}
+                    </div>
+                    {else}
+                    <label n:class="$childComponent->isRequired() ? 'required-label' : '', 'sm:col-span-2 col-form-label'">
+                        {$childComponent instanceof App\Model\Extensions\FormMultiplier\Multiplier ? "" : $childComponent->getCaption()}
+                    </label>
+                    <div class="sm:col-span-10">
+                                        <span class="text-muted small" n:if="$childComponent->getOption(App\Forms\FormOption::OPTION_NOTE)">
+                                        {$childComponent->getOption(App\Forms\FormOption::OPTION_NOTE)|noescape}
+                                    </span>
+                        {if $childComponent instanceof App\Model\Extensions\FormMultiplier\Multiplier}
+                        {include multiplierRecursion, form: $form, inputComponent: $childComponent, counter: (int)$counter+1}
+                        {else}
+                        {input $childComponent->getName(), class: 'form-control'}
+                        {/if}
+                    </div>
+                    {/if}
+                </div>
+                {/foreach}
+                <div>
+                    <div class="flex justify-end mb-4">
+                    {multiplier:remove class: 'btn btn-danger'}
+                    </div>
+                </div>
+            </div>
+            {foreach $inputComponent->getCreateButtons() as $d}
+            <div class="flex justify-end">
+                {input $d}
+            </div>
+            {/foreach}
+        </div>
+    </div>
+</div>
+
+{/define}
+{var $wysiwygInputs = 0}
+<form n:name=$form id="translateForm">
+    {varType Nette\Application\UI\Form $form}
+    {foreach (array)$form->getComponents() as $inputComponent}
+    {var $input = $form[$inputComponent->getName()]}
+    {if !($inputComponent instanceof App\Model\Extensions\FormMultiplier\Multiplier) && $input->getOption(type) !== hidden}
+    {varType Nette\Forms\Controls\TextInput $input}
+    {if $input->getName() !== "submit"}
+    {if $input->getOption(App\Forms\FormOption::UPPER_BR)}
+    <br>
+    {/if}
+    {if $input->getOption(App\Forms\FormOption::ACTIVE_WYSIWYG)}
+    {var $wysiwygInputs = 1}
+    {/if}
+    <div class="form-group" style="{$input instanceof Nette\Forms\Controls\Checkbox ? 'margin-bottom: 0!important;'|noescape}
+                {$input->getOption(App\Forms\FormOption::BACKGROUND) ? 'background: ' . $input->getOption(App\Forms\FormOption::BACKGROUND)|noescape}">
+        {if !($input instanceof Nette\Forms\Controls\Checkbox)}
+        <div>
+            <hr n:if="$input->getOption(App\Forms\FormOption::UPPER_LINE)" class="mb-8">
+            <b n:if="$input->getOption(App\Forms\FormOption::GROUP_TITLE)" class="text-muted" style="text-transform: uppercase">{$input->getOption(App\Forms\FormOption::GROUP_TITLE)}</b>
+            <div class="grid grid-cols-12">
+                <label n:name="$input->getName()" n:class="'col-span-12 sm:col-span-2 ' . ($input->isRequired() ? 'required-label' : '')">
+                    {$input->getCaption()} {if $input->isRequired()}<span class="text-red-500">*</span>{/if}
+                </label>
+                <div class="col-span-12 sm:col-span-10">
+                    <div n:if="$input->getOption(App\Forms\FormOption::ALERT_SUCCESS)"
+                         class="alert alert text-center alert-success">{$input->getOption(App\Forms\FormOption::ALERT_SUCCESS)|noescape}</div>
+                    <div n:if="$input->getOption(App\Forms\FormOption::ALERT_ERROR)"
+                         class="alert alert text-center alert-danger">{$input->getOption(App\Forms\FormOption::ALERT_ERROR)|noescape}</div>
+                    <span class="text-muted small" n:if="$input->getOption(App\Forms\FormOption::OPTION_NOTE)">
+                                        {$input->getOption(App\Forms\FormOption::OPTION_NOTE)|noescape}
+                                    </span>
+                    <br n:if="$input instanceof Nette\Forms\Controls\CheckboxList">
+                    {if !$input->getOption(App\Forms\FormOption::IS_TRANSLATED_VALUE)}
+                    {if $input instanceof Nette\Forms\Controls\TextArea}
+                    <textarea n:name="$input->getName()" n:class="$input->getOption(App\Forms\FormOption::ACTIVE_WYSIWYG) ? 'active-wysiwyg' : '', 'form-control'">
+                                </textarea>
+                    {elseif $input instanceof Nette\Forms\Controls\SelectBox}
+                    <select n:name="$input->getName()" n:class="'form-control'"></select>
+                    {else}
+                    {input $input->getName(), class: $input->getOption(App\Forms\FormOption::ACTIVE_WYSIWYG) ? 'active_wysiwyg form-control' : ($input instanceof Nette\Forms\Controls\ColorPicker ? 'w-[30%]' : 'form-control')}
+                    {/if}
+                    {else}
+                    {input $input, class: 'form-control d-none', data-translate-id: $input->getName()}
+                    <ul class="nav nav-tabs" id="tabs-{$input->getName()}" role="tablist">
+                        {foreach explode(",",$settings->languages) as $language_code}
+                        <li class="nav-item" role="presentation">
+                            <button n:class="$iterator->isFirst() ? 'active' : '', 'nav-link'" id="{$input->getName()}-{$language_code}-tab" data-bs-toggle="tab" data-bs-target="#tabs-{$input->getName()}-{$language_code}" type="button" role="tab"
+                                    aria-controls="#tabs-{$input->getName()}-home" aria-selected="{$iterator->isFirst() ? 'true' : 'false'}" title="{App\Model\Constants\Countries::LANGUAGES[$language_code]}" style="text-transform: uppercase">
+                                {$language_code}
+                            </button>
+                        </li>
+                        {/foreach}
+                    </ul>
+                    <div class="tab-content" id="tabContent-{$input->getName()}">
+                        {foreach explode(",", $settings->languages) as $language_code}
+                        <div n:class="'tab-pane fade', $iterator->isFirst() ? 'show active' : ''" id="tabs-{$input->getName()}-{$language_code}" role="tabpanel" aria-labelledby="{$input->getName()}-{$language_code}-tab">
+                            {if $input instanceof Nette\Forms\Controls\TextArea}
+                            <textarea id="textarea-{$input->getName()}-{$language_code}"  n:class="$input->getOption(App\Forms\FormOption::ACTIVE_WYSIWYG) ? 'active-wysiwyg' : '', 'form-control'" data-translate-for="{$input->getName()}" data-translate-code="{$language_code}">
+
+                                </textarea>
+                            {else}
+                            <input id="input-{$input->getName()}-{$language_code}" class="form-control" data-translate-for="{$input->getName()}" data-translate-code="{$language_code}">
+                            {/if}
+                        </div>
+                        {/foreach}
+                    </div>
+                    {/if}
+                    <span class='text-danger' n:ifcontent>{inputError $input}</span>
+                </div>
+            </div>
+            <hr n:if="$input->getOption(App\Forms\FormOption::BOTTOM_LINE)" class="mt-8 mb-8">
+        </div>
+        {else}
+        <div class="col-12">
+            {if $input->getOption(App\Forms\FormOption::UPPER_BR)}
+            <br>
+            {/if}
+            <div class="grid grid-cols-12">
+                <div class="col-span-12 sm:col-span-2"></div>
+                <div class="col-span-12 sm:col-span-10">
+                    <span class="text-muted small" n:if="$input->getOption(App\Forms\FormOption::OPTION_NOTE)">{$input->getOption(App\Forms\FormOption::OPTION_NOTE)}</span>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" n:name="$input->getName()" value="1">
+                        <label n:name="$input->getName()" n:class="$input->isRequired() ? 'required-label' : ''">
+                            {$input->getCaption()}
+                        </label>
+                        <span class='text-danger' n:ifcontent>{inputError $input}</span>
+                    </div>
+                </div>
+            </div>
+            <hr n:if="$input->getOption(App\Forms\FormOption::BOTTOM_LINE)">
+        </div>
+        {/if}
+    </div>
+    {if $input->getOption(App\Forms\FormOption::BOTTOM_BR)}
+    <br>
+    {/if}
+    {/if}
+    {/if}
+    {include multiplierRecursion, $form, $inputComponent, $inputComponent->getName()}
+    {/foreach}
+    <div class="grid grid-cols-12" n:ifset="$form['submit']">
+        <div class="col-span-12">
+            <div class="flex justify-between" style="align-content: center">
+                <div>
+                    {var $deleteRoute = $form['submit']->getOption(App\Forms\FormOption::DELETE_LINK)}
+                    <a n:if="$deleteRoute" href="{$presenter->link($deleteRoute->route, $deleteRoute->args)}" class="text-red-600 hover:underline">Odstranit tento záznam</a>
+                </div>
+                <button n:name="submit" type="submit" n:class="'btn', ($form['submit']->getOption(App\Forms\FormOption::BUTTON_DANGER) ? 'btn-danger' : 'btn-success rounded')" style="background-color: #218838"
+                        onclick="wysiwyg()">{$form['submit']->getCaption()}</button>
+            </div>
+        </div>
+    </div>
+</form>
+{block endScripts}
+<script>[...document.getElementsByClassName("deleteHref")].forEach((el) => {
+    el.addEventListener("click", function (ev) {
+        if(!confirm("Jste si jistí, že chcete odstranit tento záznam?")) ev.preventDefault();
+    })
+})</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.min.js"></script>
+{/block}

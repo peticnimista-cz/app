@@ -4,29 +4,48 @@ declare(strict_types=1);
 
 namespace App;
 
+use Nette;
 use Nette\Bootstrap\Configurator;
 
 
 class Bootstrap
 {
-    const DEBUG_MODE = true;
+    private Configurator $configurator;
+    private string $rootDir;
 
-	public static function boot(): Configurator
-	{
-		$configurator = new Configurator;
-		$appDir = dirname(__DIR__);
 
-		$configurator->setDebugMode(self::DEBUG_MODE);
-		$configurator->enableTracy($appDir . '/log');
+    public function __construct()
+    {
+        $this->rootDir = dirname(__DIR__);
+        $this->configurator = new Configurator;
+        $this->configurator->setTempDirectory($this->rootDir . '/temp');
 
-		$configurator->setTempDirectory($appDir . '/temp');
+        define('TEMPLATE_COMMON', __DIR__ . '/UI/@Common');
+    }
 
-		$configurator->createRobotLoader()
-			->addDirectory(__DIR__)
-			->register();
 
-        $configurator->addConfig($appDir . ($configurator->isDebugMode() ? "/config/dev.neon" : "/config/production.neon"));
+    public function bootWebApplication(): Nette\DI\Container
+    {
+        $this->initializeEnvironment();
+        $this->setupContainer();
+        return $this->configurator->createContainer();
+    }
 
-		return $configurator;
-	}
+
+    public function initializeEnvironment(): void
+    {
+        $this->configurator->setDebugMode(true); // enable for your remote IP
+        $this->configurator->enableTracy($this->rootDir . '/log');
+        $this->configurator->createRobotLoader()
+            ->addDirectory(__DIR__)
+            ->register();
+    }
+
+
+    private function setupContainer(): void
+    {
+        $configDir = $this->rootDir . '/config';
+        $this->configurator->addConfig($configDir . '/common.neon');
+        $this->configurator->addConfig($configDir . '/services.neon');
+    }
 }

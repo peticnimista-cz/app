@@ -23,7 +23,7 @@ use Nette\Utils\JsonException;
 /**
  * Validate and transform requests/responses (for example disable option for changing id or edited_by_user_id (generated cols) by patch
  */
-class CrudTransformer
+class CrudTransformerd
 {
 
     private EntityRepository $permissionRepository;

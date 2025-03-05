@@ -1,4 +1,0 @@
-application:
-    mapping:
-        Web: App\Web\Presenters\*\*Presenter
-        Api: ['App\Api\Controllers', '*', '*\*Controller']

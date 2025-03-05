@@ -1,0 +1,19 @@
+<form n:name=$form class="form w-full">
+    <ul class="errors" n:ifcontent>
+        <li n:foreach="$form->getOwnErrors() as $error">{$error}</li>
+    </ul>
+    <table class="border bg-[#CCCC99] border-[#808080] w-full">
+        <tr n:foreach="$form->getControls() as $input" class="border-2" n:if="($input->getOption(type) !== hidden && $input->getName() != 'submit')">
+            <td class="border-2 border-[#808080] font-semibold text-blue-950">{label $input /}</td>
+            <td class="border-2 border-[#808080]">{input $input, class: 'w-[95%]'} <span n:if="$input->isRequired()" class="text-red-500 font-bold">*</span>
+            <p class="text-sm" n:if="$input->getOption(App\Forms\FormOption::OPTION_NOTE)" style="zoom:80%">
+                {$input->getOption(App\Forms\FormOption::OPTION_NOTE)|noescape}
+            </p></td>
+        </tr>
+        <tr>
+           <td colspan="2" class="text-center">
+               <button type="submit" n:name="submit" class="bg-gray-200 px-4 hover:bg-gray-300 border border-black">{$form['submit']->getCaption()}</button>
+           </td>
+        </tr>
+    </table>
+</form>

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Router;
+namespace App\Core;
 
 use App\Bootstrap;
 use App\Model\API\Action;
@@ -19,14 +19,9 @@ final class RouterFactory
 
 	public static function createRouter(): RouteList
 	{
-		$router = new RouteList;
-        $apiRouter = new ApiRouter();
-        $applicationRouter = new WebRouter();
-
-        $router->add($apiRouter::createRouter());
-        $router->add($applicationRouter::createRouter());
-
-		return $router;
+        $router = new RouteList;
+        $router->withModule("Front")->addRoute("/", "Home:default");
+        return $router;
 	}
 
 }
